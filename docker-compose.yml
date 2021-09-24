@@ -1,0 +1,26 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongodb
+    env_file:
+      - ./docker/docker.env
+    ports:
+      - "27017:27017"
+    networks:
+      - node-webapp-network
+    volumes:
+      - mongodb-data:/data/db
+      - ./docker/docker-entry-point.sh:/docker-entrypoint-initdb.d/docker-entry-point.sh
+
+networks:
+  node-webapp-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
+# mongodb://root:example@mongo:27017/
