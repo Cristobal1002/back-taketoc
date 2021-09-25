@@ -1,5 +1,5 @@
 const Store = require('../models/store.model')
-
+const User = require('../models/user.model')
 const valTiendaByEmail = async (contact_email) => {
 
     const validarTienda = await Store.findOne({ contact_email });
@@ -18,7 +18,14 @@ const valTiendaById = async (id) => {
 
 }
 
+const valUserByEmail = async (user_email) => {
+    const user = await User.findOne({ user_email });
+    if (user) {
+        throw new Error(`El correo: ${user_email} ya se encuentra registrado`)
+    }
+}
 module.exports = {
     valTiendaByEmail,
-    valTiendaById
+    valTiendaById,
+    valUserByEmail
 }

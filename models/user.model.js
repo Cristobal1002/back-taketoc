@@ -13,14 +13,28 @@ const userSchema = Schema({
     },
     user_email: {
         type: String,
-        required: [true, 'El correo electronico del usuario es obligatorio']
+        required: [true, 'El correo electrónico del usuario es obligatorio']
     },
     rol: {
         type: String,
         required: [true, 'El rol del usuario es obligatorio'],
         enum: ['admin', 'store']
-    }
+    },
+    password: {
+        type: String,
+        required: [true, 'La contraseña es obligatorio']
+    },
 
 })
+
+userSchema.options.toJSON = {
+    transform: function(doc, ret, options) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+        delete ret.password
+        return ret;
+    }
+};
 
 module.exports = model('Usuario', userSchema)

@@ -1,6 +1,5 @@
-import * as crypto from 'crypto';
-import * as bcrypt from 'bcrypt';
-
+const  crypto = require('crypto')
+const bcrypt = require('bcrypt')
 
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY// Must be 256 bits (32 characters)
 const IV_LENGTH = 16; // For AES, this is always 16
@@ -8,7 +7,7 @@ const EAS_ALGORITHM ='aes-256-cbc'
 const HEX = 'hex'
 const SPLITTER = '_'
 
-export class EncryptService {
+ class EncryptService {
 
     async  encryptEAS(data) {
 
@@ -23,12 +22,10 @@ export class EncryptService {
         } catch(e){
     
           console.log('encrypt eas error ->', e)
-          throw new CustomError('No se puedo cifrar los datos')
+          throw new Error('No se puedo cifrar los datos')
     
         }
-    
-      
-    
+
       }
       
       async  decryptEAS(text) {
@@ -45,8 +42,19 @@ export class EncryptService {
           return decrypted.toString()
     
         }catch (e){
-          throw new CustomError('No se puedo obtener datos')
+          throw new Error('No se puedo obtener datos')
         }
       }
 
+   hashPassword = async password => {
+     const salt = await bcrypt.genSalt(10)
+     return bcrypt.hash(password, salt)
+   }
+
+   comparePassword = async (password, hash) => {
+     return bcrypt.compare(password, hash)
+   }
+
 }
+
+module.exports =  {EncryptService}
