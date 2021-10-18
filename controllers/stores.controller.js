@@ -1,15 +1,14 @@
 const { response } = require('express');
 const sendEmail = require('../services/send-email.service');
 const Store = require('../models/store.model');
-const { valTiendaById } = require('../helpers/commons-validators');
 const {EncryptService} = require('../services/encrypt.service')
 
-const USER_CREATION_URL ='https://wihom.com.co/'
+const USER_CREATION_URL ='http://localhost:4200/#/register/'
 
 const createStore = async (req, res = response) => {
 
-    const { business_name, contact_email, business_number, business_phone, business_address, business_state } = req.body;
-    const store = new Store({ business_name, contact_email, business_number, business_phone, business_address, business_state });
+    const { business_name, contact_email, business_number, business_phone, business_city, business_address, business_state } = req.body;
+    const store = new Store({ business_name, contact_email, business_number, business_phone, business_city, business_address, business_state });
 
     //Guarda en la base de datos
     await store.save( async (  err) => {

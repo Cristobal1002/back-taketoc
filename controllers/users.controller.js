@@ -1,5 +1,5 @@
 
-const { response } = require('express');
+const { response, request } = require('express');
 const Store = require("../models/store.model");
 const User = require('../models/user.model')
 const {EncryptService} = require('../services/encrypt.service')
@@ -12,7 +12,7 @@ const getUsers = (req, res = response) => {
 }
 
 const createUser = async (req, res ) => {
-    let { user_email, user_name, password, hash } = req.body;
+    let { user_email, user_name, password, user_phone, hash } = req.body;
     const es = new EncryptService()
     let store
 
@@ -28,7 +28,7 @@ const createUser = async (req, res ) => {
 
     password = await es.hashPassword(password)
     // el rol se puede poner en una constante
-    const user = new User({user_email, user_name, password,business: store, rol:'admin' });
+    const user = new User({user_email, user_name, password, user_phone, business: store, rol:'store', status:true });
 
     await user.save( async (  err) => {
         if (err) {
@@ -46,7 +46,18 @@ const createUser = async (req, res ) => {
 
 }
 
+const deleteUser = async(req, res = response) =>{
+
+    const { id } = req.params;
+    const usuario = await User.findByIdAndUpdate(id, {status: false});
+
+
+    res.json(usuario)
+
+}
+
 module.exports = {
     getUsers,
-    createUser
+    createUser,
+    deleteUser
 }

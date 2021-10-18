@@ -1,16 +1,31 @@
- const { Schema, model} = require('mongoose')
+ const { Schema, model} = require('mongoose');
+ const mongoose = require('mongoose');
+ const AutoIncrement = require('mongoose-sequence')(mongoose);
  
 
 
  const orderSchema = Schema({
 
-    order_number: {//***Como se hace esto? */
-        
-    },
     business: {
-        type: Schema.Type.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Tienda',
         required: true
+    },
+    user_creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario',
+        //required: true
+    },
+    user_modifier: {
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario',
+        //required: true
+    },
+    create_date: {
+        type: Date
+    },
+    mod_date: {
+        type: Date
     },
     order_type: {
         type: String,
@@ -37,7 +52,7 @@
         type: String,
         required: [true, 'La ciudad de entrega es obligatoria']
     },
-    customer_addres: {
+    customer_address: {
         type: String,
         required:  [true, 'La dirección del cliente es obligatoria']
     },
@@ -56,6 +71,10 @@
         required:  [true, 'El estatus es obligatorio'],
         enum: ['En Bodega','En Ruta', 'Entregado', 'Cancelado', 'Pendiente']
     },
+    order_detail: {
+        type: Array,
+        required: [true, 'El detalle del pedido es obligatorio']
+    },
     pending_marks: {
         type: String,
     }
@@ -64,4 +83,14 @@
 
  })
 
+ orderSchema.options.toJSON = {
+    transform: function(doc, ret, options) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+    }
+};
+
+ orderSchema.plugin(AutoIncrement, {inc_field: 'order_number'})
  module.exports = model('Order', orderSchema)

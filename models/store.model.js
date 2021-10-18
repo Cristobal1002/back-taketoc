@@ -18,6 +18,10 @@ const storeSchema = Schema({
         type: String,
         required: [true, 'El numero de telefono es obligatorio']
     },
+    business_city: {
+        type: String,
+        required: [true, 'La ciudad de la tienda es obligatoria']
+    },
     business_address: {
         type: String,
         required: [true, 'La dirección de la tienda es obligatoria']

@@ -14,9 +14,10 @@ class Server {
         this.conectarDB();
 
         //Paths
-        this.usersPath = '/api/usuarios'
+        this.usersPath = '/api/user'
         this.storePath = '/api/store'
-        
+        this.authPath = '/api/auth'
+        this.orderPath = '/api/order'
 
         //Middlewares
         this.middlewares();
@@ -43,8 +44,10 @@ class Server {
     }
 
     routes() {
+        this.app.use(this.authPath, require('../routes/auth.route'));
         this.app.use(this.usersPath, require('../routes/users.route'));
         this.app.use(this.storePath, require('../routes/stores.route'));
+        this.app.use(this.orderPath, require('../routes/orders.route'));
     }
 
     listen() {

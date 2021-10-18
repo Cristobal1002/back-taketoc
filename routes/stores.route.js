@@ -3,6 +3,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const { createStore, updateStore, getStores } = require('../controllers/stores.controller');
 const { valTiendaByEmail, valTiendaById } = require('../helpers/commons-validators');
+const { jwtValidate } = require('../middlewares/jwt-validate');
 const { validarCampos } = require('../middlewares/validar-campos');
 
 const router = Router();
